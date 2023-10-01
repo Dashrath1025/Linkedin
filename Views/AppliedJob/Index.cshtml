@@ -1,0 +1,33 @@
+﻿@model IEnumerable<JobSeeker>
+
+<h2 class="text-info">Candidate Lists</h2>
+
+<br />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Mobile</th>
+            <th>Resume</th>
+            <th>Experience</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>@obj.Name</td>
+                <td>@obj.Email</td>
+                <td>@obj.City</td>
+                <td>@obj.Mobile</td>
+                <td>
+                    <a class="btn btn-dark" href="@WC.image@obj.Resume" download>Download</a>
+                </td>
+                <td>@(obj.Experience ? "Yes" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>

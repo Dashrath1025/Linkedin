@@ -1,0 +1,38 @@
+﻿@model JobCategory
+
+@{
+    var t = "Add Job Category";
+}
+
+<form method="post" enctype="multipart/form-data">
+    @if (Model.Id != 0)
+    {
+        t = "Edit Job Category";
+        <input asp-for="@Model.Id" hidden />
+    }
+
+    <h2>@t</h2>
+
+    <div class="form-group">
+        <label asp-for="CategoryName"></label>
+        <input asp-for="CategoryName" class="form-control" />
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="IsActive" />
+        <label asp-for="IsActive"></label>
+        <span asp-validation-for="IsActive" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        @if (Model.Id != 0)
+        {
+            <input type="submit" class="btn btn-warning" value="Update" />
+        }
+        else
+        {
+            <input type="submit" class="btn btn-success" value="Add" />
+        }
+        <a class="btn btn-dark" asp-action="Index">Cancel</a>
+    </div>
+
+</form>

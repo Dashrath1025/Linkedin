@@ -1,0 +1,132 @@
+﻿@model IEnumerable<JobOffer>
+@{
+    DateTime currentTime = DateTime.Now;
+    var companyName = ViewContext.HttpContext.Request.Query["companyName"].ToString();
+    var jobName = ViewContext.HttpContext.Request.Query["jobName"].ToString();
+    var salaryMin = Convert.ToDecimal(ViewContext.HttpContext.Request.Query["salaryMin"]);
+    var salaryMax = Convert.ToDecimal(ViewContext.HttpContext.Request.Query["salaryMax"]);
+
+    IEnumerable<JobOffer> filteredJobOffers = Model;
+
+    if (!string.IsNullOrEmpty(companyName))
+    {
+        filteredJobOffers = filteredJobOffers.Where(o => o.CompanyName.Contains(companyName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    if (!string.IsNullOrEmpty(jobName))
+    { 
+        filteredJobOffers = filteredJobOffers.Where(o => o.JobName.Contains(jobName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    if (salaryMin > 0)
+    {
+        filteredJobOffers = filteredJobOffers.Where(o => o.Salary >= salaryMin);
+    }
+
+    if (salaryMax > 0)
+    {
+        filteredJobOffers = filteredJobOffers.Where(o => o.Salary <= salaryMax);
+    }
+
+    bool isSearchEmpty = string.IsNullOrEmpty(companyName) && string.IsNullOrEmpty(jobName) && salaryMin <= 0 && salaryMax <= 0;
+}
+
+<h2>Job Search</h2>
+
+@using (Html.BeginForm("Search", "Home", FormMethod.Get))
+{
+    <div class="row">
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <input type="text" name="companyName" class="form-control" placeholder="Search by Company Name" value="@companyName" aria-label="Search by Company Name">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <input type="text" name="jobName" class="form-control" placeholder="Search by Job Name" value="@jobName" aria-label="Search by Job Name">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <input type="text" name="salaryMin" class="form-control" placeholder="Minimum Salary" value="@salaryMin" aria-label="Minimum Salary">
+                <input type="text" name="salaryMax" class="form-control" placeholder="Maximum Salary" value="@salaryMax" aria-label="Maximum Salary">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+        </div>
+    </div>
+}
+
+@*@if (isSearchEmpty)
+    {
+        <div class="alert alert-warning" role="alert">
+            Please enter search criteria.
+        </div>
+    }*@
+
+<div class="row row-cols-1 g-4">
+    @if (filteredJobOffers.Any())
+    {
+        foreach (var obj in filteredJobOffers)
+        {
+            TimeSpan timeElapsed = currentTime - obj.CreateDate;
+            int minutesElapsed = (int)timeElapsed.TotalMinutes;
+            <div class="col">
+                <div class="card h-100" style="width: 18rem;">
+                    <div class="card-body">
+                        <img src="~/images/T2.jpg" style="width:100px">
+                        <h5 class="card-title">@obj.JobName</h5>
+                        <p class="card-text">Desc: @obj.Description</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Company: @obj.CompanyName</li>
+                        <li class="list-group-item">Opening: @obj.NoOfOpning</li>
+                        <li class="list-group-item">Job Type: @obj.JobType</li>
+                        <li class="list-group-item">Salary: @obj.Salary</li>
+                        <li class="list-group-item">Contact: @obj.Contact</li>
+                    </ul>
+                    <div class="card-body">
+                        <a class="btn btn-info" asp-controller="JobSeeker" asp-action="Apply">Apply Now</a>
+                    </div>
+                    <div class="card-footer">
+                        @if (minutesElapsed >= 60)
+                        {
+                            int hoursElapsed = (int)timeElapsed.TotalHours;
+                            if (hoursElapsed >= 24)
+                            {
+                                int daysElapsed = (int)timeElapsed.TotalDays;
+                                if (daysElapsed >= 30)
+                                {
+                                    int monthsElapsed = daysElapsed / 30;
+                                    <small class="text-muted">Last updated @monthsElapsed months ago</small>
+                                }
+                                else
+                                {
+                                    <small class="text-muted">Last updated @daysElapsed days ago</small>
+                                }
+                            }
+                            else
+                            {
+                                <small class="text-muted">Last updated @hoursElapsed hours ago</small>
+                            }
+                        }
+                        else
+                        {
+                            <small class="text-muted">Last updated @minutesElapsed mins ago</small>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    else if (!isSearchEmpty)
+    {
+        <div class="col">
+            <div class="alert alert-info" role="alert">
+                No job offers found matching the search criteria.
+            </div>
+        </div>
+    }
+</div>

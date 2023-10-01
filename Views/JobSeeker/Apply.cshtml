@@ -1,0 +1,46 @@
+﻿@model JobSeeker
+
+<h3 class="text-warning">Fill the Details carefully</h3>
+
+<br />
+<br />
+
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City"></label>
+        <input class="form-control" asp-for="City" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Mobile"></label>
+        <input class="form-control" asp-for="Mobile" />
+        <span asp-validation-for="Mobile" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Resume"></label>
+        <input class="form-control" type="file" name="file" />
+        <span asp-validation-for="Resume" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input  asp-for="Experience" />
+        <label asp-for="Experience"></label>
+        <span asp-validation-for="Experience" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+       <button type="submit" class="btn btn-info">Apply</button>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-dark">Back</a>
+    </div>
+
+</form>

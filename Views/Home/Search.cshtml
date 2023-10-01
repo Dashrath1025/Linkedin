@@ -1,0 +1,58 @@
+﻿@model IEnumerable<JobOffer>
+@{
+    DateTime currentTime = DateTime.Now;
+}
+
+<div class="row row-cols-1  g-4">
+    @foreach (var obj in Model)
+    {
+        TimeSpan timeElapsed = currentTime - obj.CreateDate;
+        int minutesElapsed = (int)timeElapsed.TotalMinutes;
+        <div class="col">
+            <div class="card h-100" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@obj.JobName</h5>
+                    <p class="card-text">Desc: @obj.Description</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Company: @obj.CompanyName</li>
+                    <li class="list-group-item">Opening: @obj.NoOfOpning</li>
+                    <li class="list-group-item">Job Type: @obj.JobType</li>
+                    <li class="list-group-item">Salary: @obj.Salary</li>
+                    <li class="list-group-item">Contact: @obj.Contact</li>
+                </ul>
+                <div class="card-body">
+                    <a class="btn btn-info" asp-controller="JobSeeker" asp-action="Apply">Apply Now</a>
+                    <a asp-action="Index" asp-controller="Home" class="btn btn-dark">Back To Home</a>
+                </div>
+                <div class="card-footer">
+                    @if (minutesElapsed >= 60)
+                    {
+                        int hoursElapsed = (int)timeElapsed.TotalHours;
+                        if (hoursElapsed >= 24)
+                        {
+                            int daysElapsed = (int)timeElapsed.TotalDays;
+                            if (daysElapsed >= 30)
+                            {
+                                int monthsElapsed = daysElapsed / 30;
+                                <small class="text-muted">Last updated @monthsElapsed months ago</small>
+                            }
+                            else
+                            {
+                                <small class="text-muted">Last updated @daysElapsed days ago</small>
+                            }
+                        }
+                        else
+                        {
+                            <small class="text-muted">Last updated @hoursElapsed hours ago</small>
+                        }
+                    }
+                    else
+                    {
+                        <small class="text-muted">Last updated @minutesElapsed mins ago</small>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,45 @@
+﻿@model IEnumerable<JobOffer>
+@{
+    DateTime currentTime = DateTime.Now;
+}
+
+
+<h2>Your Job Listings</h2>
+<div class="text-right">
+    <a class="btn btn-info" asp-action="Upsert">Post A Job</a>
+</div>
+<br />
+<br />
+
+<div class="row row-cols-1  g-4">
+    @foreach (var obj in Model)
+    {
+        TimeSpan timeElapsed = currentTime - obj.CreateDate;
+        int minutesElapsed = (int)timeElapsed.TotalMinutes;
+
+        <div class="col">
+            <div class="card h-100" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@obj.JobName</h5>
+                    <p class="card-text">Desc: @obj.Description</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Company: @obj.CompanyName</li>
+                    <li class="list-group-item">Opening: @obj.NoOfOpning</li>
+                    <li class="list-group-item">Job Type: @obj.JobType</li>
+                    <li class="list-group-item">Salary: @obj.Salary</li>
+                    <li class="list-group-item">Contact: @obj.Contact</li>
+                    <li class="list-group-item">Active: @obj.isActive</li>
+                </ul>
+                <div class="card-body">
+                    <a class="btn btn-info" asp-action="Upsert" asp-route-id="@obj.Id">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@obj.Id">Delete</a>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Last updated @minutesElapsed mins ago</small>
+                </div>
+               
+            </div>
+        </div>
+    }
+</div>

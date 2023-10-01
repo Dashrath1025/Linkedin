@@ -1,0 +1,8 @@
+﻿@model JobView
+
+
+<form method="post">
+    <select asp-items="@(new SelectList(ViewBag.Select,"Id","CategoryName"))" class="form-control" asp-for="JobId">
+        <option selected value="" disabled>---select---</option>
+    </select>
+</form>
